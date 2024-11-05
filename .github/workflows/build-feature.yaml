@@ -7,8 +7,8 @@ on:
   pull_request:
     branches: ['feature/*']
     paths: ['**/*']
-  workflow_dispatch:
-    inputs:
+  # workflow_dispatch:
+  #   inputs:
       
         
 jobs:
@@ -25,7 +25,12 @@ jobs:
           distribution: 'adopt'
       
       - name: Build with Maven
-        run: mvn clean install
+        run: | 
+          mvnw clean install
+          echo "build with mvn"
       
       - name: Run unit tests
-        run: mvn test
+        run: |
+          mvnw test
+          echo "test execution!"
+
