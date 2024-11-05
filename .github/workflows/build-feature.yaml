@@ -1,0 +1,36 @@
+name: Build-Feature 
+run-name: Runner Build-Feature
+on:
+  push:
+    branches: ['feature/*']
+    paths: ['**/*']
+  pull_request:
+    branches: ['feature/*']
+    paths: ['**/*']
+  # workflow_dispatch:
+  #   inputs:
+      
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4.5.0
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+      
+      - name: Build with Maven
+        run: | 
+          mvn clean install
+          echo "build with mvn"
+      
+      - name: Run unit tests
+        run: |
+          mvn test
+          echo "test execution!"
+
