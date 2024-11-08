@@ -1,0 +1,58 @@
+name: Publish Artifact
+run-name: Runner Psh-Artifact
+on:
+  repository_dispatch: # event para ejecutar el workflow mediante otro
+    types: ['publish-artifact-event'] # este event-name puede ser cualquiera pero se debe indicar en el otro wf
+
+jobs:
+ job-down-art:
+   runs-on: 'ubuntu-latest'
+   env:
+     ART_NAME: 'back-0.0.1-SNAPSHOT.jar'
+   permissions:
+     contents: write
+     pull-requests: write
+   steps:
+     - name: Debug Paylod ## Validate name base branch
+       run: | 
+         echo "${{ github.event.client_payload.base_branch }}"
+
+     - name: Check Out
+       uses: actions/checkout@v4
+       with:
+         ref: ${{ github.event.client_payload.base_branch }} # get name base branch
+         fetch-depth: 0
+
+     - name: Check Last hashids
+       run: |
+         git log -4
+     
+     - name: Set Up Java 17
+       uses: actions/setup-java@v3
+       with:
+         distribution: 'temurin'
+         java-version: '17'
+     
+     - name: Cache Mvn Dependencies
+       uses: actions/cache@v4
+       with:
+         path: ~/.m2/repository
+         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+         restore-keys: |
+           ${{ runner.os }}-maven-
+     
+    # COMPILE, TEST & PACKAGE PROJECT
+     - name: Build Test Package Project
+       run: |
+         mvn clean test package -DskipTests=true --batch-mode --update-snapshots
+         ls -R target/
+         ls -al
+     
+    #  PUBLISH ARTIFACT
+     - name: Upload Artifact
+       if: success()
+       uses: actions/upload-artifact@v4
+       with:
+         name: back-artifact
+         path: ${{ github.workspace }}/target/${{ env.ART_NAME }}
+           

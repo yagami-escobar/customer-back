@@ -41,7 +41,7 @@ jobs:
           echo "Build with maven!"
 
 
-  job-merge:
+  job-merge: # descarga el codigo de la base branch, e integra los cambios(merge, push) en la base branch.
     runs-on: ubuntu-latest
     needs: job-build  # necesita o depende de otro job.
     if: ${{ success() }}  # solo se va ejecutar si el job anterior se ejecuto con exito
