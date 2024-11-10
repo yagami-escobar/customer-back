@@ -1,8 +1,8 @@
-name: Publish Artifact
-run-name: Runner Psh-Artifact
+name: Psh-Art
+run-name: Runner Psh-Art
 on:
   repository_dispatch: # event para ejecutar el workflow mediante otro
-    types: ['psh-event-art'] # este event-name puede ser cualquiera pero se debe indicar en el otro wf
+    types: [psh-event-art] # este event-name puede ser cualquiera pero se debe indicar en el otro wf
 
 jobs:
  job-down-art:

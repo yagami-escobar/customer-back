@@ -1,5 +1,5 @@
-name: Build-Feature 
-run-name: Runner Build-Feature
+name: Build-Feat
+run-name: Runner Build-Feat
 on:
   # push:
   #   branches: ['feature/*']
@@ -71,7 +71,7 @@ jobs:
 
       - name: Trigger Wf Artifact
         if: success()
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
