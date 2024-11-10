@@ -44,7 +44,7 @@ jobs:
   job-merge: # descarga el codigo de la base branch, e integra los cambios(merge, push) en la base branch.
     runs-on: ubuntu-latest
     needs: job-build  # necesita o depende de otro job.
-    if: ${{ success() }}  # solo se va ejecutar si el job anterior se ejecuto con exito
+    if: success()  # solo se va ejecutar si el job anterior se ejecuto con exito
     permissions:
       contents: write # sobre el contenido se pueda escribir.
       pull-requests: write  # sobre el pr se puede escribir.
@@ -56,16 +56,28 @@ jobs:
           fetch-depth: 0
       
       - name: Merge to develop branch
-        if: ${{ success() }} # si todo lo anterior tuvo exito
+        if: success() # si todo lo anterior tuvo exito
         run: |
           git config --global user.name "WF-USER"
           git config --global user.email "EMAIL-OF-WF@USER"
           git merge --no-ff --verbose origin/${{ github.event.pull_request.head.ref }} -m "Merge PR #${{ github.event.number }}"
       
       - name: Push changes after merge
-        if: ${{ success() }}
+        if: success()
         uses: ad-m/github-push-action@master
         with:
-            github_token: ${{ secrets.GITHUB_TOKEN}} # token de caracter temporal
-            branch: ${{ github.base_ref }}
+          github_token: ${{ secrets.GITHUB_TOKEN}} # token de caracter temporal
+          branch: ${{ github.base_ref }}
+
+      - name: Trigger Wf Artifact
+        if: success()
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: psh-event-art
+          client-payload: '{ "base_branch": "${{ github.base_ref}}" }' # payload(json) que se envia al otro wf.
+
+            
+
 
