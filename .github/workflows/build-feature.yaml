@@ -76,7 +76,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.repository }}
           event-type: psh-event-art
-          client-payload: '{ "base_branch": "${{ github.base_ref}}" }' # payload(json) que se envia al otro wf..
+          client-payload: '{ "base_branch": "${{ github.base_ref}}" }' # payload(json) que se envia al otro wf.
 
             
 
