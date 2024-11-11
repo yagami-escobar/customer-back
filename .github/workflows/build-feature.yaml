@@ -48,6 +48,7 @@ jobs:
     permissions:
       contents: write # sobre el contenido se pueda escribir.
       pull-requests: write  # sobre el pr se puede escribir.
+
     steps:
       - name: Checkout code # lo que hace disponibilizar todo mi codigo en el runner
         uses: actions/checkout@v4
