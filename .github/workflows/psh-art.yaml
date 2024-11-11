@@ -20,7 +20,7 @@ jobs:
      - name: Check Out
        uses: actions/checkout@v4
        with:
-         ref: ${{ github.event.client_payload.base_branch }} # get name base branch
+         ref: ${{ github.event.client_payload.base_branch }} # get name base branchh
          fetch-depth: 0
 
      - name: Check Last hashids
