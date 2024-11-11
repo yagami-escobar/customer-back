@@ -48,6 +48,7 @@ jobs:
     permissions:
       contents: write # sobre el contenido se pueda escribir.
       pull-requests: write  # sobre el pr se puede escribir.
+
     steps:
       - name: Checkout code # lo que hace disponibilizar todo mi codigo en el runner
         uses: actions/checkout@v4
@@ -66,14 +67,14 @@ jobs:
         if: ${{ success() }}
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.PAT_TOKEN }} # token de caracter temporall
+          github_token: ${{ secrets.GITHUB_TOKEN }} # token de caracter temporal
           branch: ${{ github.base_ref }}
 
       - name: Trigger Wf Artifact
         if: ${{ success() }}
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
           event-type: psh-event-art
           client-payload: '{ "base_branch": "${{ github.base_ref}}" }' # payload(json) que se envia al otro wf.
