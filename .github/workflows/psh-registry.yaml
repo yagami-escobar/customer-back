@@ -1,0 +1,20 @@
+name: Psh Registry
+run-name: Runner Psh-Registry
+on:
+  repository_dispatch:
+    types: ['upload-image']
+jobs:
+  job-upload-image:
+    runs-on: 'ubuntu-latest'
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Retrieve Parameters from Payload
+        run: echo " ${{ github.event.client_payload.checksum }}" # get hash
+      
+      - name: Download Artifact
+        uses: actions/chec
+    
+
+
