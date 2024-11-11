@@ -8,7 +8,7 @@ jobs:
  job-down-art:
    runs-on: 'ubuntu-latest'
    env:
-     ART_NAME: 'back-0.0.1-SNAPSHOT.jar'
+     ART_NAME: 'customer-0.0.1-SNAPSHOT.jar'
    permissions:
      contents: write
      pull-requests: write
@@ -54,5 +54,7 @@ jobs:
        uses: actions/upload-artifact@v4
        with:
          name: back-artifact
-         path: ${{ github.workspace }}/../target/${{ env.ART_NAME }}
+         path: ${{ github.workspace }}/target/${{ env.ART_NAME }}
            
+https://github.com/yagami-escobar/customer-back/pull/22/commits/cc59bb3e39f10ec10e914e3e13b996f8fa362ab1
+https://github.com/yagami-escobar/customer-back/pull/22/commits/536ea33eb75209fbe7c8e0ad44608a9ba1efd720
