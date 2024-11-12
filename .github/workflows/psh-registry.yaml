@@ -51,7 +51,7 @@ jobs:
           echo "----------------------------------------------------------"
           echo "RUN ls -al /tmp: $(ls -al /tmp)"
           echo "----------------------------------------------------------"
-          echo "RUN cp -v .docker/Dockerfile /tmp/back-artifact/: $(cp -v .docker/Dockerfile /tmp/back-artifact/)"
+          echo "RUN cp -v .docker/Dockerfile /tmp/back-artifact/: $(cp -v .docker/Dockerfile /tmp/Dockerfile)"
           echo "RUN cp -v /tmp/back-artifact/${{ github.event.client_payload.artifact_name }} /tmp/${{ github.event.client_payload.artifact_name }}: $(cp -v /tmp/back-artifact/${{ github.event.client_payload.artifact_name }} /tmp/${{ github.event.client_payload.artifact_name }})"
           echo "RUN ls -al /tmp: $(ls -al /tmp)"
       
