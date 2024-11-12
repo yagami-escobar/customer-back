@@ -44,7 +44,8 @@ jobs:
         uses: actions/checkout@v4
         if: success()
         
-      - run: |
+      - name: Copy Files to Upload (MAIN)
+        run: |
           echo "RUN pwd: $(pwd)"
           echo "RUN ls -al: $(ls -al)"
           echo "----------------------------------------------------------"
@@ -58,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: back-artifact
-          path: 
+          path: |
             /tmp/Dockerfile
             /tmp/${{ github.event.client_payload.artifact_name }}
           
