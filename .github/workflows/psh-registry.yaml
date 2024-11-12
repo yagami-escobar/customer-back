@@ -62,7 +62,12 @@ jobs:
           path: |
             /tmp/Dockerfile
             /tmp/${{ github.event.client_payload.artifact_name }}
-          
+
+      - name: Validate Art (VAL)
+        run: |
+          echo "RUN ls -R /tmp: $(ls -R /tmp)"  
+          echo "RUN ls -al /tmp: $(ls -al /tmp)"  
+
   job-docker:
     runs-on: 'ubuntu-latest'
     needs: 'job-upload-image'
@@ -89,7 +94,7 @@ jobs:
         with:
           name: back-artifact
           path: 
-            ./back-artifact
+            /tmp
 
       - name: Display Structure (VAL)
         run: |
