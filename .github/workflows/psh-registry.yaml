@@ -25,7 +25,7 @@ jobs:
       
       - name: Display structure of downloades art (VAL)
         run: |
-          ls -al /tmp/back-artifact
+          echo "RUN ls -al /tmp/back-artifact: $(ls -al /tmp/back-artifact)"
 
       - name: checksum of download-artifact (VAL)
         run: |
@@ -45,14 +45,14 @@ jobs:
         if: success()
         
       - run: |
-          pwd
-          ls -al
+          echo "RUN pwd: $(pwd)"
+          echo "RUN ls -al: $(ls -al)"
           echo "----------------------------------------------------------"
-          ls -al /tmp
+          echo "RUN ls -al /tmp: $(ls -al /tmp)"
           echo "----------------------------------------------------------"
-          cp -v .docker/Dockerfile /tmp/back-artifact/
-          cp -v /tmp/back-artifact/${{ github.event.client_payload.artifact_name }}/tmp/${{ github.event.client_payload.artifact_name }}
-          ls -al /tmp
+          echo "RUN cp -v .docker/Dockerfile /tmp/back-artifact/: $(cp -v .docker/Dockerfile /tmp/back-artifact/)"
+          echo "RUN cp -v /tmp/back-artifact/${{ github.event.client_payload.artifact_name }} /tmp/${{ github.event.client_payload.artifact_name }}: $(cp -v /tmp/back-artifact/${{ github.event.client_payload.artifact_name }} /tmp/${{ github.event.client_payload.artifact_name }})"
+          echo "RUN ls -al /tmp: $(ls -al /tmp)"
       
       - name: Upload Art Final (MAIN)
         uses: actions/upload-artifact@v4
