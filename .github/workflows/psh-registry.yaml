@@ -87,24 +87,23 @@ jobs:
       - name: Download Art Final (MAIN)
         uses: actions/download-artifact@v3
         with:
-          name: back-artifact
+          name: backContext
           path: 
-            ./context
+            ./backContext
 
       - name: Display Structure Art (VAL)
         run: |
-          ls -R context
+          ls -R backContext
 
       - name: Build & Push
         uses: docker/build-push-action@v2
         with:
-          context: ./context
-          file: ./context/Dockerfile
+          context: ./backContext
+          file: ./backContext/Dockerfile
           build-args: |
-            JAR_FILE=.context/${{ github.event.client_payload.artifact_name }}
+            JAR_FILE=.backContext/${{ github.event.client_payload.artifact_name }}
             DB_PASS=${{ secrets.DB_PASS }}
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository }}/customer-back:${{ github.sha }}
-          labels: org.opencontainers.image.source=
           
