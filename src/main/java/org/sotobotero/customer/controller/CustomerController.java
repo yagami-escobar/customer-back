@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Value;
 
 @RestController
 @RequestMapping("/api/v1/customer")
@@ -34,11 +35,21 @@ public class CustomerController {
     @Autowired
     private CustomerRepository prsRepository;
 
+    @Value( "${db.password}" )
+    private String password;
+
+
     @Operation(summary = "Get all customers")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the customers"),
             @ApiResponse(responseCode = "404", description = "Not found the customers"),
     })
+
+    @GetMapping("/testproperty")
+    public ResponseEntity<String> getTestValue() {
+        return new ResponseEntity<>(password, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<Customer>> getAllcustomers() {
         List<Customer> customers = prsRepository.findAll();

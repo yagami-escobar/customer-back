@@ -55,3 +55,25 @@ jobs:
        with:
          name: back-artifact
          path: ${{ github.workspace }}/target/${{ env.ART_NAME }}
+
+
+
+    #  CALL CHECKSUM FROM ARTIFACT
+     - name: Verify Checksum
+       if: success()
+       id: call_checksum
+       run: |
+         ls -al ${{ github.workspace }}/target
+         SHA256=$(sha256sum ${{ github.workspace}})/target/$ART_NAME | awk '{ print $1 }'
+         JSON=\''{"message": "publish artifact", "artifact_name": "'"$ART_NAME"'", "checksum": "'"$SHA256"'"}'\'
+         echo JSON_PAYLOAD=$(printf '%s\n' "$JSON") >> $GITHUB_ENV
+
+     #  TRIGGER WF PUSH-REGISTRY
+     - name: Trigger Wf Push-Registry
+       if: success()
+       uses: peter-evans/repository-dispatch@v3
+       with:
+         token: ${{ secrets.GITHUB_TOKEN }}
+         repository: ${{ github.repository }}
+         event-type: 'psh-registry-event'
+         client-payload: ${{ fromJson(env.JSON_PAYLOAD) }} # payload(jsonn) que se envia al otro wf.
