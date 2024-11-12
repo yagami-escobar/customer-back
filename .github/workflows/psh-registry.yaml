@@ -2,7 +2,7 @@ name: Psh Registry
 run-name: Runner Psh-Registry
 on:
   repository_dispatch:
-    types: ['upload-image']
+    types: ['psh-registry-event']
 jobs:
   job-upload-image:
     runs-on: 'ubuntu-latest'
@@ -10,11 +10,93 @@ jobs:
       contents: write
       actions: read
     steps:
-      - name: Retrieve Parameters from Payload
+      - name: Retrieve Parameters from Payload (VAL)
         run: echo " ${{ github.event.client_payload.checksum }}" # get hash
       
-      - name: Download Artifact
-        uses: actions/chec
-    
+      - name: Download Artifact from other Wf (MAIN)
+        uses: dawidd6/action-download-artifact@v2
+        id: download-artifact
+        with:
+          name: back-artifact
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: psh-art.yaml
+          workflow_conclusion: success
+          path: /tmp/back-artifact
+      
+      - name: Display structure of downloades art (VAL)
+        run: |
+          ls -al /tmp/back-artifact
 
+      - name: checksum of download-artifact (VAL)
+        run: |
+          echo "HASH=$(sha256sum /tmp/back-artifact/${{ github.event.client_payload.artifact_name}} | awk '{print $1}')" >> $GITHUB_ENV
+      
+      - name: Compare Checksum (VAL)
+        run:
+          if [ "${{ env.HASH }}" == "${{ github.event.client-client_payload.artifact_name }}" ]; then
+            echo "The checksum are equals! successfuly operation"
+          else
+            echo "The checksum are no equals! failed operation"
+            exit 1
+          fi
 
+      - name: Check Out (MAIN)
+        uses: actions/checkout@v4
+        if: success()
+        
+      - run: |
+          ls -al
+          cp .docker/Dockerfile /tmp/back-artifact/
+          cp /tmp/back-artifact/${{ github.event.client_payload.artifact_name }} /tmp/${{ github.event.client_payload.artifact_name }}
+      
+      - name: Upload Art Final (MAIN)
+        uses: actions/upload-artifact@v4
+        with:
+          name: back-artifact
+          path: 
+            /tmp/Dockerfile
+            /tmp/${{ github.event.client_payload.artifact_name }}
+          
+  job-docker:
+      runs-on: 'ubuntu-latest'
+      # permissions:
+      #   contents: write
+      #   actions: read
+      steps:
+        - name: Set Up QEMU (MAIN)
+          uses: docker/setup-qemu-action@v2
+        
+        - name: Set up Docker Buildx (MAIN)
+          uses: docker/setup-buildx-action@v2
+
+        - name: Login to Docker Hub (MAIN)    ## Authenticamos el WF en Gh Packages para poder subir nuestras images.
+          uses: docker/login-action@v2
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+        
+        - name: Download Art Final (MAIN)
+          uses: actions/download-artifact@v3
+          with:
+            name: back-artifact
+            path: 
+              ./context
+
+        - name: Display Structure Art (VAL)
+          run: |
+            ls -R context
+
+        - name: Build & Push
+          uses: docker/build-push-action@v2
+          with:
+            context: ./context
+            file: ./context/Dockerfile
+            build-args: |
+              JAR_FILE=.context/${{ github.event.client_payload.artifact_name }}
+              DB_PASS=${{ secrets.DB_PASS }}
+            platforms: linux/amd64,linux/arm64
+            push: true
+            tags: ghcr.io/${{ github.repository }}/customer-back:${{ github.sha }}
+            labels: org.opencontainers.image.source=
+            

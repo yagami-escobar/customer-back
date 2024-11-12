@@ -5,7 +5,7 @@ FROM --platform=arm64 maven:3.8.6-openjdk-17-slim AS build
 USER 10001
 
 # STEP 2: Set Working Directory
-WORKDIR /app
+WORKDIR /tmp
 
 # STEP 3: Copy solo el pom.xml para aprovechar el Cache de Docker
 COPY pom.xml .
@@ -20,15 +20,15 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # STEP 2: Use a more optimitzed base image for execution
-FROM openjdk:17-alpine
+FROM openjdk:17-alpine AS runtime
 
 # Set Working Directory
-WORKDIR /app
+WORKDIR /tmp
 
 # Copiar el Jar desde el container de construccion como Parametro
 ARG JAR_FILE
 ARG DB_PASS
-COPY --from=build $(JAR_FILE) /app/app.jar
+COPY --from=build $(JAR_FILE) /tmp/app.jar
 
 ENV DB_PASS=$(DB_PASS)
 
