@@ -89,6 +89,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Validate Art (VAL)
+        run: |
+          echo "RUN pwd: $(pwd)"
+          echo "RUN ls -al /tmp: $(ls -al /tmp)"  
+
       - name: Download Art (MAIN)
         uses: actions/download-artifact@v3
         with:
