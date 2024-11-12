@@ -87,21 +87,21 @@ jobs:
       - name: Download Art (MAIN)
         uses: actions/download-artifact@v3
         with:
-          name: backContext
+          name: back-artifact
           path: 
-            ./backContext
+            ./back-artifact
 
       - name: Display Structure (VAL)
         run: |
-          ls -R backContext
+          ls -R back-artifact
 
       - name: Build & Push (MAIN)
         uses: docker/build-push-action@v2
         with:
-          context: ./backContext
+          context: ./back-artifact
           file: ./backContext/Dockerfile
           build-args: |
-            JAR_FILE=.backContext/${{ github.event.client_payload.artifact_name }}
+            JAR_FILE=.back-artifact/${{ github.event.client_payload.artifact_name }}
             DB_PASS=${{ secrets.DB_PASS }}
           platforms: linux/amd64,linux/arm64
           push: true
