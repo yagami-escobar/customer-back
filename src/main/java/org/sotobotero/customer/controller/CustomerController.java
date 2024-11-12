@@ -35,8 +35,8 @@ public class CustomerController {
     @Autowired
     private CustomerRepository prsRepository;
 
-    @value("${db.password}")
-    private String DB_PASSWORD;
+    @Value( "${db.password}" )
+    private String password;
 
 
     @Operation(summary = "Get all customers")
@@ -47,7 +47,7 @@ public class CustomerController {
 
     @GetMapping("/testproperty")
     public ResponseEntity<String> getTestValue() {
-        return new ResponseEntity<>(DB_PASSWORD, HttpStatus.OK);
+        return new ResponseEntity<>(password, HttpStatus.OK);
     }
 
     @GetMapping
