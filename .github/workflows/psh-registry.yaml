@@ -84,18 +84,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Download Art Final (MAIN)
+      - name: Download Art (MAIN)
         uses: actions/download-artifact@v3
         with:
           name: backContext
           path: 
             ./backContext
 
-      - name: Display Structure Art (VAL)
+      - name: Display Structure (VAL)
         run: |
           ls -R backContext
 
-      - name: Build & Push
+      - name: Build & Push (MAIN)
         uses: docker/build-push-action@v2
         with:
           context: ./backContext
