@@ -33,7 +33,7 @@ jobs:
       
       - name: Compare Checksum (VAL)
         run:
-          if [ "${{ env.HASH }}" == "${{ github.event.client_payload.artifact_name }}" ]; then
+          if [ "${{ env.HASH }}" == "${{ github.event.client_payload.checksum }}" ]; then
             echo "The checksum are equals! successfuly operation"
           else
             echo "The checksum are no equals! failed operation"
