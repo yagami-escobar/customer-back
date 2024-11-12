@@ -32,7 +32,7 @@ jobs:
           echo "HASH=$(sha256sum /tmp/back-artifact/${{ github.event.client_payload.artifact_name}} | awk '{print $1}')" >> $GITHUB_ENV
       
       - name: Compare Checksum (VAL)
-        run:
+        run: |
           if [ "${{ env.HASH }}" == "${{ github.event.client_payload.checksum }}" ]; then
             echo "The checksum are equals! successfuly operation"
           else
