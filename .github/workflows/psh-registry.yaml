@@ -45,9 +45,14 @@ jobs:
         if: success()
         
       - run: |
+          pwd
           ls -al
-          cp .docker/Dockerfile /tmp/back-artifact/
-          cp /tmp/back-artifact/${{ github.event.client_payload.artifact_name }} /tmp/${{ github.event.client_payload.artifact_name }}
+          echo "----------------------------------------------------------"
+          ls -al /tmp
+          echo "----------------------------------------------------------"
+          cp -v .docker/Dockerfile /tmp/back-artifact/
+          cp -v /tmp/back-artifact/${{ github.event.client_payload.artifact_name }}/tmp/${{ github.event.client_payload.artifact_name }}
+          ls -al /tmp
       
       - name: Upload Art Final (MAIN)
         uses: actions/upload-artifact@v4
