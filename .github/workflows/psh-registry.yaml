@@ -58,45 +58,47 @@ jobs:
             /tmp/${{ github.event.client_payload.artifact_name }}
           
   job-docker:
-      runs-on: 'ubuntu-latest'
-      # permissions:
-      #   contents: write
-      #   actions: read
-      steps:
-        - name: Set Up QEMU (MAIN)
-          uses: docker/setup-qemu-action@v2
-        
-        - name: Set up Docker Buildx (MAIN)
-          uses: docker/setup-buildx-action@v2
+    runs-on: 'ubuntu-latest'
+    needs: 'job-upload-image'
+    if: success()
+    # permissions:
+    #   contents: write
+    #   actions: read
+    steps:
+      - name: Set Up QEMU (MAIN)
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx (MAIN)
+        uses: docker/setup-buildx-action@v2
 
-        - name: Login to Docker Hub (MAIN)    ## Authenticamos el WF en Gh Packages para poder subir nuestras images.
-          uses: docker/login-action@v2
-          with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-        
-        - name: Download Art Final (MAIN)
-          uses: actions/download-artifact@v3
-          with:
-            name: back-artifact
-            path: 
-              ./context
+      - name: Login to Docker Hub (MAIN)    ## Authenticamos el WF en Gh Packages para poder subir nuestras images.
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Download Art Final (MAIN)
+        uses: actions/download-artifact@v3
+        with:
+          name: back-artifact
+          path: 
+            ./context
 
-        - name: Display Structure Art (VAL)
-          run: |
-            ls -R context
+      - name: Display Structure Art (VAL)
+        run: |
+          ls -R context
 
-        - name: Build & Push
-          uses: docker/build-push-action@v2
-          with:
-            context: ./context
-            file: ./context/Dockerfile
-            build-args: |
-              JAR_FILE=.context/${{ github.event.client_payload.artifact_name }}
-              DB_PASS=${{ secrets.DB_PASS }}
-            platforms: linux/amd64,linux/arm64
-            push: true
-            tags: ghcr.io/${{ github.repository }}/customer-back:${{ github.sha }}
-            labels: org.opencontainers.image.source=
-            
+      - name: Build & Push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./context
+          file: ./context/Dockerfile
+          build-args: |
+            JAR_FILE=.context/${{ github.event.client_payload.artifact_name }}
+            DB_PASS=${{ secrets.DB_PASS }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ghcr.io/${{ github.repository }}/customer-back:${{ github.sha }}
+          labels: org.opencontainers.image.source=
+          
