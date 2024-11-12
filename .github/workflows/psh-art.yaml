@@ -64,7 +64,7 @@ jobs:
        id: call_checksum
        run: |
          ls -al ${{ github.workspace }}/target
-         SHA256=$(sha256sum ${{ github.workspace}})/target/$ART_NAME | awk '{ print $1 }'
+         SHA256=$(sha256sum ${{ github.workspace }}/target/$ART_NAME | awk '{ print $1 }')
          JSON=\''{"message": "publish artifact", "artifact_name": "'"$ART_NAME"'", "checksum": "'"$SHA256"'"}'\'
          echo JSON_PAYLOAD=$(printf '%s\n' "$JSON") >> $GITHUB_ENV
 
