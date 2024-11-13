@@ -113,7 +113,7 @@ jobs:
           build-args: |
             JAR_FILE=./context/${{ github.event.client_payload.artifact_name }}
             DB_PASS=${{ secrets.DB_PASS }}
-          platforms: linux/amd64,linux/arm64
+          # platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository }}/customer-back:${{ github.sha }}
           
