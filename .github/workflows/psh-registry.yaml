@@ -111,7 +111,7 @@ jobs:
           context: ./context
           file: ./context/Dockerfile
           build-args: |
-            JAR_FILE=./context/${{ github.event.client_payload.artifact_name }}
+            JAR_FILE=${{ github.event.client_payload.artifact_name }}
             DB_PASS=${{ secrets.DB_PASS }}
           # platforms: linux/amd64,linux/arm64
           push: true

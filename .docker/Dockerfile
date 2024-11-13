@@ -7,8 +7,12 @@ USER 10001
 # STEP 2: Set Working Directory
 WORKDIR /tmp
 
+RUN pwd
+
+RUN ls -al
 # STEP 3: Copy solo el pom.xml para aprovechar el Cache de Docker
 COPY pom.xml .
+
 
 # Descargar dependencias de Mvn (esto permitira cachear las dependencias y acelerar el proceso de construccion)
 RUN mvn dependency:go-offline
@@ -37,4 +41,4 @@ ENV DB_PASS=$(DB_PASS)
 EXPOSE 8080
 
 # Ejecutar la App
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/tmp/app.jar"]
