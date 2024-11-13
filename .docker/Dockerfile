@@ -20,7 +20,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # STEP 2: Use a more optimitzed base image for execution
-FROM openjdk:17-alpine AS runtime
+FROM openjdk:18-alpine AS runtime
 
 # Set Working Directory
 WORKDIR /tmp
