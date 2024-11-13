@@ -1,5 +1,5 @@
 # STEP 1: Use a lighter base image
-FROM openjdk:17-alpine AS build
+FROM openjdk:17-alpine
 
 # Establecemos el user no-root (rootless) para mejorar la seguridad
 USER 10001
@@ -32,7 +32,7 @@ RUN ls -al
 # Copiar el Jar desde el container de construccion como Parametro
 ARG JAR_FILE
 ARG DB_PASS
-COPY --from=build $(JAR_FILE) /tmp/app.jar
+COPY $(JAR_FILE) /tmp/app.jar
 
 ENV DB_PASS=$(DB_PASS)
 
