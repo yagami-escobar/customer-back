@@ -2,7 +2,7 @@
 FROM openjdk:17-alpine
 
 # Establecemos el user no-root (rootless) para mejorar la seguridad
-USER 10001
+# USER 10001
 
 RUN addgroup -g 1028 devopsc \
     && adduser -D -G devopsc admin
