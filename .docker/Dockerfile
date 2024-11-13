@@ -1,5 +1,5 @@
 # STEP 1: Use a lighter base image
-FROM --platform=arm64 maven:3.8.6-openjdk-17-slim AS build
+FROM maven:3.8.6-openjdk-18-slim AS build
 
 # Establecemos el user no-root (rootless) para mejorar la seguridad
 USER 10001
