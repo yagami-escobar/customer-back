@@ -10,29 +10,13 @@ RUN addgroup -g 1028 devopsc \
 # STEP 2: Set Working Directory
 VOLUME /tmp
 
-RUN pwd
-
-RUN ls -al
-
-# Descargar dependencias de Mvn (esto permitira cachear las dependencias y acelerar el proceso de construccion)
-# RUN mvn dependency:go-offline
-
-# Copiar el codigo fuente
-# COPY src ./src
-
-# Construir el proyecto con Mvn omitiendo los tests
-# RUN mvn clean package -DskipTests
-
-# STEP 2: Use a more optimitzed base image for execution
-# FROM openjdk:17-alpine AS runtime
-
-# Set Working Directory
-# WORKDIR /tmp
+# Validate Path & List
+RUN pwd && ls -al
 
 # Copiar el Jar desde el container de construccion como Parametro
 ARG JAR_FILE
 ARG DB_PASS
-COPY $(JAR_FILE) /tmp/app.jar
+COPY ${JAR_FILE} /tmp/app.jar
 
 ENV DB_PASS=$(DB_PASS)
 
@@ -43,7 +27,7 @@ RUN chown -R admin:devopsc /tmp
 USER admin
 
 # Exponer el Port donde la App escuchara
-EXPOSE 8080
+# EXPOSE 8080
 
 # Ejecutar la App
 ENTRYPOINT ["java", "-jar", "/tmp/app.jar"]
