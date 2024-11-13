@@ -10,15 +10,12 @@ WORKDIR /tmp
 RUN pwd
 
 RUN ls -al
-# STEP 3: Copy solo el pom.xml para aprovechar el Cache de Docker
-COPY pom.xml .
-
 
 # Descargar dependencias de Mvn (esto permitira cachear las dependencias y acelerar el proceso de construccion)
 RUN mvn dependency:go-offline
 
 # Copiar el codigo fuente
-COPY src ./src
+# COPY src ./src
 
 # Construir el proyecto con Mvn omitiendo los tests
 RUN mvn clean package -DskipTests
